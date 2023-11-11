@@ -1,0 +1,33 @@
+{% extends 'Shop/base.html' %}
+{% load static %}
+{% block title %}Search{% endblock title %}
+{% block main-content %}
+<div class="container my-5">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="row">
+                {% if product %}
+                {% for prod in product %}
+                <div class="col-sm-4 text-center mb-4">
+                    <a href="{% url 'product-detail' prod.id %}" class="btn">
+                        <div class="item">
+                            <img src="{{prod.product_image.url}}" alt="" height="300" class="">
+                            <div class="fw-bold">{{prod.title}}</div>
+                            <div class="fw-bold">Tk. {{prod.discounted_price}} <small
+                                    class="fw-light text-decoration-line-through">{{prod.selling_price}}</small>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                {% endfor %}
+                {% else %}
+                <div class="box box-shadow mt-5 mb-5 pt-5">
+                    <h1>This item or brand name is not avialable </h1>
+                </div>
+                
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock main-content %}

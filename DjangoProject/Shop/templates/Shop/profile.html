@@ -1,0 +1,76 @@
+{% extends 'Shop/base.html' %}
+{% load static %}
+{% block title %}Profile{% endblock title %}
+{% block main-content %}
+<div class="container my-5">
+    <div class="row">
+        <h3>Welcome {{request.user|capfirst}}</h3>
+        <div class="col-sm-2 border-end">
+            <ul class="list-unstyled">
+                <li class="d-grid"><a href="{% url 'profile' %}" class="btn-primary">Profile</a></li>
+                <li class="d-grid"><a href="{% url 'address' %}" class="btn">Address</a></li>
+            </ul>
+        </div>
+        <div class="col-sm-8 offset-sm-1">
+            <form action="" method="POST">
+                {% csrf_token %}
+                {% for i in form %}
+              <div class="form-group col-lg-6 mb-3">
+                {{i.label_tag}}{{i}}<small class="text-danger">{{i.errors | striptags }}</small>
+              </div>
+              {% endfor %}
+              <div class="col-12 my-3">
+                <button type="submit" class="btn btn-success">Submit</button>
+              </div>
+
+              {% if messages %}
+                {% for message in messages%}
+                <p {% if message.tags %} class="alert alert-{{message.tags}} mb-2" {% endif%} >{{message}}</p>
+                {% endfor %}
+                {% endif %}
+
+              {% if form.non_field_errors %}
+                {% for error in form.non_field_errors %}
+                <p class="alert alert-danger my-3">{{error}}</p>
+                {% endfor %}
+                {% endif %}
+
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+  const divisionSelect = document.getElementById("id_division");
+  const districtSelect = document.getElementById("id_district");
+
+  const divisionDistricts = {
+      'Dhaka': [ 'Dhaka','Faridpur','Gazipur', 'Gopalganj','Kishoreganj', 'Madaripur','Manikganj', 'Munshiganj', 'Narayanganj', 'Narsingdi', 'Rajbari', 'Shariatpur','Tangail'],
+      'Rangpur': ['Dinajpur','Gaibandha','Kurigram','Lalmonirhat','Nilphamari','Panchagarh','Rangpur','Thakurgaon'],
+      'Rajshahi':['Bogra','Joypurhat','Naogaon','Natore','Chapai Nawabganj','Pabna','Rajshahi','Sirajganj'],
+      'Khulna': ['Bagerhat','Chuadanga','Jessore','Jhenaidah','Khulna','Kushtia','Magura','Meherpur','Narail','Satkhira'],
+      'Barishal': ['Barguna','Barisal','Bhola','Jhalokati','Patuakhali','Pirojpur'],
+      'Chattogram':['Bandarban','Brahmanbaria','Chandpur','Chittagong','Comilla',"Cox's Bazar",'Feni','Khagrachhari','Lakshmipur','Noakhali','Rangamati'],
+      'Mymenshing': ['Jamalpur','Mymensingh','Netrokona','Sherpur'],
+      'Sylhet':['Habiganj','Moulvibazar','Sunamganj','Sylhet']
+  };
+
+  function updateDistrictOptions() {
+      const selectedDivision = divisionSelect.value;
+      districtSelect.innerHTML = ''; 
+
+      if (selectedDivision in divisionDistricts) {
+          divisionDistricts[selectedDivision].forEach(district => {
+              const option = document.createElement("option");
+              option.text = district;
+              option.value = district;
+              districtSelect.appendChild(option);
+          });
+      }
+  }
+
+  
+  divisionSelect.addEventListener('change', updateDistrictOptions);
+
+  updateDistrictOptions();
+</script>
+{% endblock main-content %}
